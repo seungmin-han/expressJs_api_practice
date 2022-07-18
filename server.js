@@ -65,7 +65,7 @@ app.get('/:token/read',(req, res, next) => {
     console.log("get:", req.params.token);
     console.log("list:", list);
     let result = [];
-    let random = Math.floor(Math.random() * 1);
+    let random = Math.floor(Math.random() * 2);
     if (tokens.includes(req.params.token)) {
         list.forEach((value, index, array) => {
             result.push({ id: index, name: value });
@@ -78,7 +78,7 @@ app.get('/:token/read',(req, res, next) => {
         });
         res.json({
             status: random
-            , errorMessage: ''
+            , errorMessage: '랜덤으로 에러'
             , response: result
         });   
     } else {
@@ -90,7 +90,7 @@ app.post('/:token/update', (req, res, next) => {
     if (tokens.includes(req.params.token)) {
         let id = req.body.id;
         let name = req.body.name;
-        if (list.length < id) {    
+        if (list.length <= id) {    
             next(new Error("존재하지 않는 키"));
         } else {
             list[id] = name;
