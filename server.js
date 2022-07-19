@@ -9,7 +9,8 @@ let tokens = [];
 let list = [];
 
 
-const generateRandomString = (num) => {
+const generateRandomString = (num) =>
+{
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890';
     let result = '';
     const charactersLength = characters.length;
@@ -20,7 +21,8 @@ const generateRandomString = (num) => {
 }
 
 
-app.get('/login', (req, res) => {
+app.get('/login', (req, res) =>
+{
     let token = generateRandomString(16);
     tokens.push(token);
     res.status(200);
@@ -36,13 +38,18 @@ app.get('/login', (req, res) => {
 });
 
 
-app.post('/:token/create',(req, res, next) => {
+app.post('/:token/create', (req, res, next) =>
+{
     console.log("body:",req.body);
-    if (tokens.includes(req.params.token)) {
+    if (tokens.includes(req.params.token))
+    {
         let name = req.body.name;
-        if (list.includes(name)) {    
+        if (list.includes(name))
+        {    
             next(new Error('중복된 아이디'));
-        } else {
+        }
+        else
+        {
             list.push(name);
             res.status(200);
             res.header({
@@ -56,20 +63,24 @@ app.post('/:token/create',(req, res, next) => {
                 , response: ''
             });  
         }
-    } else {
+    }
+    else
+    {
         next(new Error("일치하지 않는 토큰"));
     }
 })
 
-app.get('/:token/read',(req, res, next) => {
+app.get('/:token/read', (req, res, next) =>
+{
     console.log("get:", req.params.token);
     console.log("list:", list);
     let result = [];
     let random = Math.floor(Math.random() * 2);
-    if (tokens.includes(req.params.token)) {
-        list.forEach((value, index, array) => {
+    if (tokens.includes(req.params.token))
+    {
+        list.forEach((value, index, _) => {
             result.push({ id: index, name: value });
-        })
+        });
         res.status(200);
         res.header({
             "Access-Control-Allow-Origin": "http://localhost:8080"
@@ -81,18 +92,25 @@ app.get('/:token/read',(req, res, next) => {
             , errorMessage: '랜덤으로 에러'
             , response: result
         });   
-    } else {
+    }
+    else
+    {
         next(new Error("일치하지 않는 토큰"));
     }
 })
 
-app.post('/:token/update', (req, res, next) => {
-    if (tokens.includes(req.params.token)) {
+app.post('/:token/update', (req, res, next) =>
+{
+    if (tokens.includes(req.params.token))
+    {
         let id = req.body.id;
         let name = req.body.name;
-        if (list.length <= id) {    
+        if (list.length <= id)
+        {    
             next(new Error("존재하지 않는 키"));
-        } else {
+        }
+        else
+        {
             list[id] = name;
             res.status(200);
             res.header({
@@ -106,17 +124,24 @@ app.post('/:token/update', (req, res, next) => {
                 , response: ''
             });
         }
-    } else {
+    }
+    else
+    {
         next(new Error("일치하지 않는 토큰"));
     }
 })
 
-app.post('/:token/delete', (req, res, next) => {
-    if (tokens.includes(req.params.token)) {
+app.post('/:token/delete', (req, res, next) =>
+{
+    if (tokens.includes(req.params.token))
+    {
         let id = req.body.id;
-        if (list.length-1 < id) {    
+        if (list.length - 1 < id)
+        {    
             next(new Error("존재하지 않는 키"));
-        } else {
+        }
+        else
+        {
             console.log('delete');
             list.splice(id, 1);
             res.status(200);
@@ -131,22 +156,27 @@ app.post('/:token/delete', (req, res, next) => {
                 , response: ''
             });
         }
-    } else {
+    }
+    else
+    {
         next(new Error("일치하지 않는 토큰"));
     }
 })
 
-app.listen(port, () => {
+app.listen(port, () =>
+{
     console.log(`server is listening at localhost:${port}`);
 });
 
-app.use((err, req, res, next) => {
+app.use((err, req, res, next) =>
+{
     console.error(err);
     res.status(500).header({
         "Access-Control-Allow-Origin": "http://localhost:8080"
-                    , "Access-Control-Allow-Methods" : "GET,POST,PUT,DELETE,OPTIONS"
-                    , "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
-    }).json({
+        , "Access-Control-Allow-Methods" : "GET,POST,PUT,DELETE,OPTIONS"
+        , "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
+    })
+    .json({
         status: 1
         , errorMessage: err.message
         , response: ''
@@ -154,10 +184,10 @@ app.use((err, req, res, next) => {
 })
 
 app.all('/*', function (req, res, next) {
+    console.log("all");
     res.header({
         "Access-Control-Allow-Origin": "http://localhost:8080"
         , "Access-Control-Allow-Methods" : "GET,POST,PUT,DELETE,OPTIONS"
         , "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
     })
-    next();
 });
