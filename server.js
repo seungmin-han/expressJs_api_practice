@@ -32,7 +32,13 @@ app.get('/login', (req, res) =>
         , "Access-Control-Allow-Methods" : "GET,POST,PUT,DELETE,OPTIONS"
         , "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
     });
-    res.json({ 'token': token });
+    res.json({
+        status: 0
+        , errorMessage: ''
+        , response: {
+            token: token
+        }
+    });  
 
     console.log(tokens);
 });
@@ -60,7 +66,7 @@ app.post('/:token/create', (req, res, next) =>
                 status: 0
                 , errorMessage: ''
                 , response: ''
-            });  
+            });
         }
     }
     else
