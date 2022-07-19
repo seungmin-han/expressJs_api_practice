@@ -1,13 +1,14 @@
 const express = require('express');
 const app = express();
 const port = 4010;
-const e = require('express');
+const cors = require('cors');
+
+app.use(cors());
 app.use(express.json());
 
 
 let tokens = [];
 let list = [];
-
 
 const generateRandomString = (num) =>
 {
@@ -19,15 +20,6 @@ const generateRandomString = (num) =>
     }
     return result;
 }
-
-app.all("*", function (req, res, next) {
-    res.header({
-        "Access-Control-Allow-Origin": "http://localhost:8080"
-        , "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS"
-        , "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, Token"
-    });
-    next();
-});
 
 app.all('/:token/*', function (req, res, next) {
     if (tokens.includes(req.params.token))
