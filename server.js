@@ -40,7 +40,6 @@ app.get('/login', (req, res) =>
 
 app.post('/:token/create', (req, res, next) =>
 {
-    console.log("body:",req.body);
     if (tokens.includes(req.params.token))
     {
         let name = req.body.name;
@@ -55,7 +54,7 @@ app.post('/:token/create', (req, res, next) =>
             res.header({
                 "Access-Control-Allow-Origin": "http://localhost:8080"
                 , "Access-Control-Allow-Methods" : "GET,POST,PUT,DELETE,OPTIONS"
-                , "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
+                , "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, Token"
             });
             res.json({
                 status: 0
@@ -184,10 +183,11 @@ app.use((err, req, res, next) =>
 })
 
 app.all('/*', function (req, res, next) {
-    console.log("all");
     res.header({
         "Access-Control-Allow-Origin": "http://localhost:8080"
         , "Access-Control-Allow-Methods" : "GET,POST,PUT,DELETE,OPTIONS"
-        , "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
+        , "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, Token"
     })
+
+    next();
 });
